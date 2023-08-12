@@ -10,6 +10,10 @@ mod handlers;
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv().ok();
+    let port: u16 = env::var("PORT")
+        .unwrap_or("8080".to_string())
+        .parse()
+        .expect("Port must be number");
     let conn = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
     let (client, connection) = tokio_postgres::connect(conn.as_str(), NoTls).await.unwrap();
     let client = Arc::new(client);
@@ -27,7 +31,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(web::Data::new(client.clone()))
             .service(handlers::stream_song)
     })
-    .bind(("0.0.0.0", 8080))?
+    .bind(("0.0.0.0", port))?
     .run()
     .await
 }

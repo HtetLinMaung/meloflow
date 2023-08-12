@@ -5,7 +5,6 @@ use std::io::Seek;
 use std::io::SeekFrom;
 use std::path::PathBuf;
 use std::{fs::File, sync::Arc};
-
 use tokio_postgres::Client;
 
 async fn fetch_song_path_from_db(
