@@ -64,7 +64,9 @@ async fn stream_song(
     } else {
         let mut entire_file = Vec::with_capacity(file_size as usize);
         file.read_to_end(&mut entire_file).unwrap();
-        Ok(HttpResponse::Ok().body(entire_file))
+        Ok(HttpResponse::Ok()
+            .append_header(("Accept-Ranges", "bytes"))
+            .body(entire_file))
     }
 }
 
