@@ -58,6 +58,7 @@ async fn stream_song(
                 "Content-Range",
                 format!("bytes {}-{}/{}", start, end, file_size),
             ))
+            .append_header(("Content-Type", "audio/mpeg"))
             .body(file_chunk))
     } else {
         let mut entire_file = Vec::with_capacity(file_size as usize);
