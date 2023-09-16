@@ -9,7 +9,7 @@ use tokio_postgres::Client;
 
 async fn fetch_song_path_from_db(
     song_id: i32,
-    client: web::Data<Arc<Client>>,
+    client: &web::Data<Arc<Client>>,
 ) -> Result<String, tokio_postgres::Error> {
     let row = client
         .query_one(
@@ -28,7 +28,7 @@ async fn stream_song(
     req: HttpRequest,
     client: web::Data<Arc<Client>>,
 ) -> Result<HttpResponse, Error> {
-    let file_path = match fetch_song_path_from_db(*song_id, client).await {
+    let file_path = match fetch_song_path_from_db(*song_id, &client).await {
         Ok(path) => path,
         Err(_) => {
             return Err(actix_web::error::ErrorNotFound(
